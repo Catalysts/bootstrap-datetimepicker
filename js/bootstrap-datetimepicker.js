@@ -68,6 +68,10 @@
 		this.showMeridian = options.showMeridian || this.element.data('show-meridian') || false;
 		this.initialDate = options.initialDate || new Date();
 
+        //Check if datetimepicker has limitation pickers attached
+        this.startLimitPicker = options.startLimitPicker || this.element.data('start-limit-picker-id') || false;
+        this.endLimitPicker = options.endLimitPicker || this.element.data('end-limit-picker-id') || false;
+
 		this._attachEvents();
 
 		this.formatViewType = "datetime";
@@ -274,6 +278,17 @@
 		},
 
 		show: function (e) {
+
+            //Before showing the picker, check if picker has limitation pickers attached
+            if (this.startLimitPicker) {
+                slp = new Datetimepicker($("#" + this.startLimitPicker), $.fn.datetimepicker.defaults);
+                this.setStartDate(slp.getDate());
+            }
+            if (this.endLimitPicker) {
+                slp = new Datetimepicker($("#" + this.endLimitPicker), $.fn.datetimepicker.defaults);
+                this.setEndDate(slp.getDate());
+            }
+
 			this.picker.show();
 			this.height = this.component ? this.component.outerHeight() : this.element.outerHeight();
 			if (this.forceParse) {
